@@ -6,9 +6,12 @@ import 'package:rxdart/rxdart.dart';
 
 class MsgBloc extends BlocBase{
   final _msgController = BehaviorSubject<Message>();
-  final _msgRepository = MsgRepository();
+  MsgRepository _msgRepository ;
   Observable<Message> get outEvent => _msgController.stream;
-
+ MsgBloc(){
+   _msgRepository= MsgRepository();
+   _receiveMessage();
+ }
   @override
   void dipsose() {
     _msgController.close();
@@ -34,12 +37,13 @@ class MsgBloc extends BlocBase{
 
     }
    
-    _msgRepository.sendMessage();
+    _msgRepository.sendMessage(Message()..body=msg..senderId=id..targetId=dest..timestamp=DateTime.now().toIso8601String());
 
 
 }
-  void _receiveMessage(Message msg,String sender){
-    _msgController.add(msg);
+  void _receiveMessage(){
+    _msgRepository.subscribe().pipe(_msgController);
+    
 
 }
 }

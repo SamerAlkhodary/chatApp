@@ -1,6 +1,12 @@
+import 'package:chat/chatService.dart';
+import 'package:chat/proto/service.pbgrpc.dart';
 import 'package:chat/repo/repository.dart';
 
 class MsgRepository extends Repository{
+  ChatService chatService;
+  MsgRepository(User user){
+    chatService= ChatService(user);
+  }
   @override
   void login() {
     // TODO: implement login
@@ -11,14 +17,16 @@ class MsgRepository extends Repository{
     // TODO: implement logout
   }
 
+
   @override
-  void receiveMsg() {
-    // TODO: implement receiveMsg
+  void sendMessage(Message msg) {
+    chatService.sendMessage(msg);
   }
 
   @override
-  void sendMessage() {
-    // TODO: implement sendMessage
+  Stream<Message> subscribe() {
+   
+    return chatService.subscribeToService();
   }
 
 }
