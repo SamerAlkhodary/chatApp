@@ -1,13 +1,13 @@
 import 'package:chat/bloc/blocProvider.dart';
 import 'package:chat/bloc/msgBloc.dart';
 import 'package:chat/model/appEvent.dart';
-import 'package:chat/model/msg.dart';
+import 'package:chat/proto/service.pbgrpc.dart';
 import 'package:flutter/material.dart';
 
 class MyHomePage extends StatefulWidget {
-  String name,img;
+  String name,img,targetId,id;
 
-  MyHomePage({@required  this.name,@required  this.img,Key key,}) : super(key: key);
+  MyHomePage({@required this.id,@required  this.name,@required  this.img,@required this.targetId,Key key,}) : super(key: key);
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -28,7 +28,7 @@ class _MyHomePageState extends State<MyHomePage> {
     double msgBoxWidth;
 
 
-  List<Msg> messages= List();
+  List<Message> messages= List();
   @override
   void initState() {
     super.initState();
@@ -78,14 +78,15 @@ class _MyHomePageState extends State<MyHomePage> {
               children: <Widget>[
                 Container(
                   height: MediaQuery.of(context).size.height*0.75,
-                  child: StreamBuilder<Msg>(
+                  child: StreamBuilder<Message>(
                     stream: _msgBloc.outEvent,
                     builder: (context, snapshot) {
                        if(snapshot.hasData){
+                                  if (snapshot.data.targetId==this.widget.targetId ||snapshot.data.senderId==widget.targetId)
                                   messages.add(snapshot.data);
-                                  messages.forEach((f)=> print(f.message));
+                                  print(messages.length);
                                   return ListView(
-                                   children: messages.map((m)=> Padding(child:messageList(m.message,m.userSent),padding: EdgeInsets.all(5))).toList()
+                                   children: messages.map((m)=> Padding(child:messageList(m.body,m.senderId==this.widget.id),padding: EdgeInsets.all(5))).toList()
 ,
                                   );
                         }else {
@@ -130,7 +131,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   
   void onSend(){
-        _msgBloc.dispatch(SendMsgEvent(_controllerSend.text));
+        _msgBloc.dispatch(SendMsgEvent(_controllerSend.text,this.widget.id,this.widget.targetId));
 
     print(_controllerSend.text);
     _controllerSend.clear();

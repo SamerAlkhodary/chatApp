@@ -52,9 +52,9 @@ class ChatListState extends State{
             
             child: ListView(
               children: <Widget>[
-                _listElement("Anita","https://yt3.ggpht.com/a/AGF-l7-a9lpgByp7WRiqArVeoR6K7QikEmtQ6sJWIA=s900-c-k-c0xffffffff-no-rj-mo"),
+                _listElement("Anita","1","0","https://yt3.ggpht.com/a/AGF-l7-a9lpgByp7WRiqArVeoR6K7QikEmtQ6sJWIA=s900-c-k-c0xffffffff-no-rj-mo",),
                 Divider(),
-                _listElement("Amer", "https://click-storm.com/i/articles/0/2712/juggernautbyvivienkad6ulep7.jpg"),
+                _listElement("Amer", "2","0","https://click-storm.com/i/articles/0/2712/juggernautbyvivienkad6ulep7.jpg"),
                 Divider(),
                 
                 
@@ -70,7 +70,7 @@ class ChatListState extends State{
     );
   }
 
-  Widget _listElement(String name, String url){
+  Widget _listElement(String name,String targetId,String id, String url){
 
 
    return Container(
@@ -83,14 +83,14 @@ class ChatListState extends State{
              
 
             )),title: Text(name,style: TextStyle(fontWeight: FontWeight.bold),),
-            onTap: ()=>_chatPressed(name,url,context)
+            onTap: ()=>_chatPressed(name,url,targetId,id,context)
             ),
             );
 
 }
- void _chatPressed(String name, String img,BuildContext context){
+ void _chatPressed(String name, String img,String targetId,String id,BuildContext context){
   Navigator.push(context,MaterialPageRoute(
-    builder: (context)=> MyHomePage(name:name,img:img)
+    builder: (context)=> MyHomePage(id: id,name:name,img:img,targetId:targetId ,)
   ));
 
          

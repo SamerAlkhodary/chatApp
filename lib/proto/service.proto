@@ -1,0 +1,30 @@
+syntax = "proto3";
+package proto;
+service Messinger {
+    rpc sendMessage (Message) returns (Close);
+    rpc createStream (RegisterRequest) returns (stream Message);
+   
+}
+message RegisterRequest {
+    User user=1;
+    bool active=2;
+}
+
+message LogoutRequest {
+    string id=1;
+}
+message Close {
+}
+message User {
+    string id=1;
+    string name=2;
+    string profile_pic=3;
+}
+message Message {
+    string sender_id=1;
+    string target_id=2;
+    string body=3;
+    string timestamp=4;
+
+}
+
