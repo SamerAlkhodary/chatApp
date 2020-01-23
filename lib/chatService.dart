@@ -3,12 +3,13 @@ import 'package:grpc/grpc.dart' as prefix0;
 import 'package:grpc/service_api.dart';
 
 class ChatService{
-  User user;
+  String emulator ="10.0.2.2";
+  String phone=  "192.168.1.96";
   MessingerClient client;
-  ChatService(this.user){
+  ChatService(){
     client= MessingerClient(
       prefix0.ClientChannel(
-        "localhost",
+       phone,
         port:8080,
         options: prefix0.ChannelOptions(
           credentials: prefix0.ChannelCredentials.insecure()
@@ -22,7 +23,7 @@ class ChatService{
     client.sendMessage(message);
     return Close();
   }
-  Stream<Message> subscribeToService()async*{
+  Stream<Message> subscribeToService(User user)async*{
     RegisterRequest registerRequest= RegisterRequest()
     ..active=true
     ..user=user;

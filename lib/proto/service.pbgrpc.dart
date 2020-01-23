@@ -7,7 +7,7 @@
 
 import 'dart:async' as $async;
 
-import 'dart:core' as $core;
+import 'dart:core' as $core show int, String, List;
 
 import 'package:grpc/service_api.dart' as $grpc;
 import 'service.pb.dart' as $0;
@@ -71,7 +71,7 @@ abstract class MessingerServiceBase extends $grpc.Service {
 
   $async.Stream<$0.Message> createStream_Pre($grpc.ServiceCall call,
       $async.Future<$0.RegisterRequest> request) async* {
-    yield* createStream(call, await request);
+    yield* createStream(call, (await request) as $0.RegisterRequest);
   }
 
   $async.Future<$0.Close> sendMessage(

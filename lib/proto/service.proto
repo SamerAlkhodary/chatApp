@@ -25,6 +25,7 @@ message Message {
     string target_id=2;
     string body=3;
     string timestamp=4;
+    bool read=5;
 
 }
 

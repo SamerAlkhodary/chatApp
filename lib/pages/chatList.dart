@@ -1,12 +1,28 @@
+import 'package:chat/bloc/blocProvider.dart';
+import 'package:chat/model/appEvent.dart';
 import 'package:chat/pages/mainPage.dart';
+import 'package:chat/proto/service.pbgrpc.dart';
 import 'package:flutter/material.dart';
 
 class ChatListPage extends StatefulWidget{
+
+  
+
   @override
   State<StatefulWidget> createState() => ChatListState();
 
 }
 class ChatListState extends State{
+  User user= User()
+  ..name="Samer"
+  ..profilePic="https://cdn0.gamesports.net/content_teasers/77000/77832.jpg?1545064880"
+  ..id="1";
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    var msgBloc= ServiceProvider.of(context);
+     msgBloc.dispatch(SubscribeEvent(user));
+  }
   @override
   Widget build(BuildContext context) {
     
@@ -28,13 +44,13 @@ class ChatListState extends State{
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 CircleAvatar(
-                  backgroundImage: NetworkImage("https://cdn0.gamesports.net/content_teasers/77000/77832.jpg?1545064880"),radius: 30.0,
+                  backgroundImage: NetworkImage(user.profilePic),radius: 30.0,
 
 
                 ),
                  Padding(
                    padding: EdgeInsets.only(left: 10),
-                   child: Text("Samer",style:TextStyle(fontWeight: FontWeight.bold,color: Colors.white ) ,),
+                   child: Text(user.name,style:TextStyle(fontWeight: FontWeight.bold,color: Colors.white ) ,),
                  )
               ],
             ),
@@ -52,9 +68,9 @@ class ChatListState extends State{
             
             child: ListView(
               children: <Widget>[
-                _listElement("Anita","1","0","https://yt3.ggpht.com/a/AGF-l7-a9lpgByp7WRiqArVeoR6K7QikEmtQ6sJWIA=s900-c-k-c0xffffffff-no-rj-mo",),
+                _listElement("Anita","2",user.id,"https://yt3.ggpht.com/a/AGF-l7-a9lpgByp7WRiqArVeoR6K7QikEmtQ6sJWIA=s900-c-k-c0xffffffff-no-rj-mo",),
                 Divider(),
-                _listElement("Amer", "2","0","https://click-storm.com/i/articles/0/2712/juggernautbyvivienkad6ulep7.jpg"),
+                _listElement("Amer", "0",user.id,"https://click-storm.com/i/articles/0/2712/juggernautbyvivienkad6ulep7.jpg"),
                 Divider(),
                 
                 

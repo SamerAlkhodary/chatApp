@@ -1,3 +1,5 @@
+import 'package:chat/proto/service.pbgrpc.dart';
+
 abstract class AppEvent{
 
 }
@@ -9,5 +11,11 @@ class SendMsgEvent extends AppEvent{
   String  get msg=> _msg;
    String  get id=> _id;
     String  get target=> _target;
+
+}
+class SubscribeEvent extends AppEvent{
+  User _user;
+  SubscribeEvent(this._user);
+  User get user=> _user;
 
 }

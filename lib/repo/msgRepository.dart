@@ -4,8 +4,8 @@ import 'package:chat/repo/repository.dart';
 
 class MsgRepository extends Repository{
   ChatService chatService;
-  MsgRepository(User user){
-    chatService= ChatService(user);
+  MsgRepository(){
+    chatService= ChatService();
   }
   @override
   void login() {
@@ -24,9 +24,9 @@ class MsgRepository extends Repository{
   }
 
   @override
-  Stream<Message> subscribe() {
+  Stream<Message> subscribe(User user) {
    
-    return chatService.subscribeToService();
+    return chatService.subscribeToService(user);
   }
 
 }
