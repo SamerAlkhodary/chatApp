@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:chat/bloc/blocProvider.dart';
 import 'package:chat/bloc/msgBloc.dart';
 import 'package:chat/model/appEvent.dart';
@@ -6,6 +8,9 @@ import 'package:chat/proto/service.pbgrpc.dart';
 import 'package:flutter/material.dart';
 
 class ChatListPage extends StatefulWidget{
+  var  image;
+   String name;
+  ChatListPage({@required this.image, @required this.name,Key key}) : super(key: key);
 
   
 
@@ -13,16 +18,17 @@ class ChatListPage extends StatefulWidget{
   State<StatefulWidget> createState() => ChatListState();
 
 }
-class ChatListState extends State{
+class ChatListState extends State<ChatListPage>{
   MsgBloc _bloc;
-  User user= User()
-  ..name="Samer"
-  ..profilePic="https://cdn0.gamesports.net/content_teasers/77000/77832.jpg?1545064880"
-  ..id="1";
+  User user;
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
      _bloc= ServiceProvider.of(context);
+     user= User()
+  ..name= widget.name
+  ..profilePic="https://cdn0.gamesports.net/content_teasers/77000/77832.jpg?1545064880"
+  ..id="1";
      _bloc.dispatch(SubscribeEvent(user));
   }
   @override
@@ -46,7 +52,7 @@ class ChatListState extends State{
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 CircleAvatar(
-                  backgroundImage: NetworkImage(user.profilePic),radius: 30.0,
+                  backgroundImage: FileImage(widget.image),radius: 30.0,
 
 
                 ),

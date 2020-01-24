@@ -29,11 +29,12 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  
   MsgBloc _msgBloc;
   TextEditingController _controllerSend = TextEditingController();
   double msgBoxWidth;
   ScrollController _scrollController = ScrollController();
-
+  
   List<Message> messages = List();
   @override
   void initState() {
@@ -43,6 +44,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   void didChangeDependencies() {
+    
     super.didChangeDependencies();
     _msgBloc = ServiceProvider.of(context);
   }

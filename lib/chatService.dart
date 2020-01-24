@@ -9,7 +9,7 @@ class ChatService{
   ChatService(){
     client= MessingerClient(
       prefix0.ClientChannel(
-       phone,
+       emulator,
         port:8080,
         options: prefix0.ChannelOptions(
           credentials: prefix0.ChannelCredentials.insecure()
