@@ -1,6 +1,8 @@
 syntax = "proto3";
 package proto;
 service Messinger {
+    rpc signup (SignupRequest) returns (SignupResponse);
+    rpc addFriend (AddFriendRequest) returns (AddFriendResponse);
     rpc sendMessage (Message) returns (Close);
     rpc createStream (RegisterRequest) returns (stream Message);
    
@@ -27,5 +29,20 @@ message Message {
     string timestamp=4;
     bool read=5;
 
+}
+message SignupRequest{
+    User user=1;
+}
+message SignupResponse {
+    bool done=1;
+    string msg=2;
+}
+message AddFriendRequest {
+    string id=1;
+}
+message AddFriendResponse {
+    bool done=1;
+    User user = 2;
+    string msg=3;
 }
 

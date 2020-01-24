@@ -1,4 +1,5 @@
 import 'package:chat/bloc/blocProvider.dart';
+import 'package:chat/bloc/msgBloc.dart';
 import 'package:chat/model/appEvent.dart';
 import 'package:chat/pages/mainPage.dart';
 import 'package:chat/proto/service.pbgrpc.dart';
@@ -13,6 +14,7 @@ class ChatListPage extends StatefulWidget{
 
 }
 class ChatListState extends State{
+  MsgBloc _bloc;
   User user= User()
   ..name="Samer"
   ..profilePic="https://cdn0.gamesports.net/content_teasers/77000/77832.jpg?1545064880"
@@ -20,8 +22,8 @@ class ChatListState extends State{
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    var msgBloc= ServiceProvider.of(context);
-     msgBloc.dispatch(SubscribeEvent(user));
+     _bloc= ServiceProvider.of(context);
+     _bloc.dispatch(SubscribeEvent(user));
   }
   @override
   Widget build(BuildContext context) {
@@ -66,15 +68,20 @@ class ChatListState extends State{
               borderRadius: BorderRadius.only(topLeft: Radius.circular(60))
             ),
             
-            child: ListView(
-              children: <Widget>[
-                _listElement("Anita","2",user.id,"https://yt3.ggpht.com/a/AGF-l7-a9lpgByp7WRiqArVeoR6K7QikEmtQ6sJWIA=s900-c-k-c0xffffffff-no-rj-mo",),
-                Divider(),
-                _listElement("Amer", "0",user.id,"https://click-storm.com/i/articles/0/2712/juggernautbyvivienkad6ulep7.jpg"),
-                Divider(),
-                
-                
-              ],
+            child: StreamBuilder<List<Message>>(
+              stream: _bloc.outEvent,
+              builder: (context, snapshot) {
+                return ListView(
+                  children: <Widget>[
+                    _listElement("Anita","2",user.id,"https://yt3.ggpht.com/a/AGF-l7-a9lpgByp7WRiqArVeoR6K7QikEmtQ6sJWIA=s900-c-k-c0xffffffff-no-rj-mo",snapshot),
+                    Divider(),
+                    _listElement("Amer", "0",user.id,"https://click-storm.com/i/articles/0/2712/juggernautbyvivienkad6ulep7.jpg",snapshot),
+                    Divider(),
+                    
+                    
+                  ],
+                );
+              }
             ),
           ),
         ),
@@ -86,7 +93,11 @@ class ChatListState extends State{
     );
   }
 
-  Widget _listElement(String name,String targetId,String id, String url){
+  Widget _listElement(String name,String targetId,String id, String url,AsyncSnapshot<List<Message>>snapshot){
+    List<Message> list = List();
+    if(snapshot.hasData){
+     list = snapshot.data.where((m)=> !m.read && m.senderId!=id && m.senderId==targetId).toList();
+    }
 
 
    return Container(
@@ -99,7 +110,15 @@ class ChatListState extends State{
              
 
             )),title: Text(name,style: TextStyle(fontWeight: FontWeight.bold),),
-            onTap: ()=>_chatPressed(name,url,targetId,id,context)
+            onTap: ()=>_chatPressed(name,url,targetId,id,context),
+            trailing: list.isNotEmpty?Container(
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.red[300]
+              ),
+              width: 20,
+              height: 20,
+              child: Center(child: Text(list.length.toString(),style: TextStyle(color: Colors.white),),)):Container(width: 10,height: 10,)
             ),
             );
 

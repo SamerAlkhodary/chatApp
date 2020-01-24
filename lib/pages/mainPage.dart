@@ -92,6 +92,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           var msgs = snapshot.data.where((msg) =>
                               msg.targetId == this.widget.targetId ||
                               msg.senderId == widget.targetId);
+                          msgs.forEach((m)=> m.read=true);
 
 
                           return ListView(

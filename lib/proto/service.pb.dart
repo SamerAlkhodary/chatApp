@@ -5,13 +5,13 @@
 // @dart = 2.3
 // ignore_for_file: camel_case_types,non_constant_identifier_names,library_prefixes,unused_import,unused_shown_name,return_of_invalid_type
 
-import 'dart:core' as $core show bool, Deprecated, double, int, List, Map, override, pragma, String;
+import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
 class RegisterRequest extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo('RegisterRequest', package: const $pb.PackageName('proto'))
-    ..a<User>(1, 'user', $pb.PbFieldType.OM, User.getDefault, User.create)
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo('RegisterRequest', package: const $pb.PackageName('proto'), createEmptyInstance: create)
+    ..aOM<User>(1, 'user', subBuilder: User.create)
     ..aOB(2, 'active')
     ..hasRequiredFields = false
   ;
@@ -27,22 +27,33 @@ class RegisterRequest extends $pb.GeneratedMessage {
   static RegisterRequest create() => RegisterRequest._();
   RegisterRequest createEmptyInstance() => create();
   static $pb.PbList<RegisterRequest> createRepeated() => $pb.PbList<RegisterRequest>();
-  static RegisterRequest getDefault() => _defaultInstance ??= create()..freeze();
+  @$core.pragma('dart2js:noInline')
+  static RegisterRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<RegisterRequest>(create);
   static RegisterRequest _defaultInstance;
 
+  @$pb.TagNumber(1)
   User get user => $_getN(0);
+  @$pb.TagNumber(1)
   set user(User v) { setField(1, v); }
+  @$pb.TagNumber(1)
   $core.bool hasUser() => $_has(0);
+  @$pb.TagNumber(1)
   void clearUser() => clearField(1);
+  @$pb.TagNumber(1)
+  User ensureUser() => $_ensure(0);
 
-  $core.bool get active => $_get(1, false);
+  @$pb.TagNumber(2)
+  $core.bool get active => $_getBF(1);
+  @$pb.TagNumber(2)
   set active($core.bool v) { $_setBool(1, v); }
+  @$pb.TagNumber(2)
   $core.bool hasActive() => $_has(1);
+  @$pb.TagNumber(2)
   void clearActive() => clearField(2);
 }
 
 class LogoutRequest extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo('LogoutRequest', package: const $pb.PackageName('proto'))
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo('LogoutRequest', package: const $pb.PackageName('proto'), createEmptyInstance: create)
     ..aOS(1, 'id')
     ..hasRequiredFields = false
   ;
@@ -58,17 +69,22 @@ class LogoutRequest extends $pb.GeneratedMessage {
   static LogoutRequest create() => LogoutRequest._();
   LogoutRequest createEmptyInstance() => create();
   static $pb.PbList<LogoutRequest> createRepeated() => $pb.PbList<LogoutRequest>();
-  static LogoutRequest getDefault() => _defaultInstance ??= create()..freeze();
+  @$core.pragma('dart2js:noInline')
+  static LogoutRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<LogoutRequest>(create);
   static LogoutRequest _defaultInstance;
 
-  $core.String get id => $_getS(0, '');
+  @$pb.TagNumber(1)
+  $core.String get id => $_getSZ(0);
+  @$pb.TagNumber(1)
   set id($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
   $core.bool hasId() => $_has(0);
+  @$pb.TagNumber(1)
   void clearId() => clearField(1);
 }
 
 class Close extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo('Close', package: const $pb.PackageName('proto'))
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo('Close', package: const $pb.PackageName('proto'), createEmptyInstance: create)
     ..hasRequiredFields = false
   ;
 
@@ -83,12 +99,13 @@ class Close extends $pb.GeneratedMessage {
   static Close create() => Close._();
   Close createEmptyInstance() => create();
   static $pb.PbList<Close> createRepeated() => $pb.PbList<Close>();
-  static Close getDefault() => _defaultInstance ??= create()..freeze();
+  @$core.pragma('dart2js:noInline')
+  static Close getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<Close>(create);
   static Close _defaultInstance;
 }
 
 class User extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo('User', package: const $pb.PackageName('proto'))
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo('User', package: const $pb.PackageName('proto'), createEmptyInstance: create)
     ..aOS(1, 'id')
     ..aOS(2, 'name')
     ..aOS(3, 'profilePic')
@@ -106,31 +123,45 @@ class User extends $pb.GeneratedMessage {
   static User create() => User._();
   User createEmptyInstance() => create();
   static $pb.PbList<User> createRepeated() => $pb.PbList<User>();
-  static User getDefault() => _defaultInstance ??= create()..freeze();
+  @$core.pragma('dart2js:noInline')
+  static User getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<User>(create);
   static User _defaultInstance;
 
-  $core.String get id => $_getS(0, '');
+  @$pb.TagNumber(1)
+  $core.String get id => $_getSZ(0);
+  @$pb.TagNumber(1)
   set id($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
   $core.bool hasId() => $_has(0);
+  @$pb.TagNumber(1)
   void clearId() => clearField(1);
 
-  $core.String get name => $_getS(1, '');
+  @$pb.TagNumber(2)
+  $core.String get name => $_getSZ(1);
+  @$pb.TagNumber(2)
   set name($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
   $core.bool hasName() => $_has(1);
+  @$pb.TagNumber(2)
   void clearName() => clearField(2);
 
-  $core.String get profilePic => $_getS(2, '');
+  @$pb.TagNumber(3)
+  $core.String get profilePic => $_getSZ(2);
+  @$pb.TagNumber(3)
   set profilePic($core.String v) { $_setString(2, v); }
+  @$pb.TagNumber(3)
   $core.bool hasProfilePic() => $_has(2);
+  @$pb.TagNumber(3)
   void clearProfilePic() => clearField(3);
 }
 
 class Message extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo('Message', package: const $pb.PackageName('proto'))
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo('Message', package: const $pb.PackageName('proto'), createEmptyInstance: create)
     ..aOS(1, 'senderId')
     ..aOS(2, 'targetId')
     ..aOS(3, 'body')
     ..aOS(4, 'timestamp')
+    ..aOB(5, 'read')
     ..hasRequiredFields = false
   ;
 
@@ -145,27 +176,53 @@ class Message extends $pb.GeneratedMessage {
   static Message create() => Message._();
   Message createEmptyInstance() => create();
   static $pb.PbList<Message> createRepeated() => $pb.PbList<Message>();
-  static Message getDefault() => _defaultInstance ??= create()..freeze();
+  @$core.pragma('dart2js:noInline')
+  static Message getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<Message>(create);
   static Message _defaultInstance;
 
-  $core.String get senderId => $_getS(0, '');
+  @$pb.TagNumber(1)
+  $core.String get senderId => $_getSZ(0);
+  @$pb.TagNumber(1)
   set senderId($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
   $core.bool hasSenderId() => $_has(0);
+  @$pb.TagNumber(1)
   void clearSenderId() => clearField(1);
 
-  $core.String get targetId => $_getS(1, '');
+  @$pb.TagNumber(2)
+  $core.String get targetId => $_getSZ(1);
+  @$pb.TagNumber(2)
   set targetId($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
   $core.bool hasTargetId() => $_has(1);
+  @$pb.TagNumber(2)
   void clearTargetId() => clearField(2);
 
-  $core.String get body => $_getS(2, '');
+  @$pb.TagNumber(3)
+  $core.String get body => $_getSZ(2);
+  @$pb.TagNumber(3)
   set body($core.String v) { $_setString(2, v); }
+  @$pb.TagNumber(3)
   $core.bool hasBody() => $_has(2);
+  @$pb.TagNumber(3)
   void clearBody() => clearField(3);
 
-  $core.String get timestamp => $_getS(3, '');
+  @$pb.TagNumber(4)
+  $core.String get timestamp => $_getSZ(3);
+  @$pb.TagNumber(4)
   set timestamp($core.String v) { $_setString(3, v); }
+  @$pb.TagNumber(4)
   $core.bool hasTimestamp() => $_has(3);
+  @$pb.TagNumber(4)
   void clearTimestamp() => clearField(4);
+
+  @$pb.TagNumber(5)
+  $core.bool get read => $_getBF(4);
+  @$pb.TagNumber(5)
+  set read($core.bool v) { $_setBool(4, v); }
+  @$pb.TagNumber(5)
+  $core.bool hasRead() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearRead() => clearField(5);
 }
 
