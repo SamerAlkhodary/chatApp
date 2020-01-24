@@ -108,7 +108,7 @@ class User extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo('User', package: const $pb.PackageName('proto'), createEmptyInstance: create)
     ..aOS(1, 'id')
     ..aOS(2, 'name')
-    ..aOS(3, 'profilePic')
+    ..a<$core.List<$core.int>>(3, 'profilePic', $pb.PbFieldType.OY)
     ..hasRequiredFields = false
   ;
 
@@ -146,9 +146,9 @@ class User extends $pb.GeneratedMessage {
   void clearName() => clearField(2);
 
   @$pb.TagNumber(3)
-  $core.String get profilePic => $_getSZ(2);
+  $core.List<$core.int> get profilePic => $_getN(2);
   @$pb.TagNumber(3)
-  set profilePic($core.String v) { $_setString(2, v); }
+  set profilePic($core.List<$core.int> v) { $_setBytes(2, v); }
   @$pb.TagNumber(3)
   $core.bool hasProfilePic() => $_has(2);
   @$pb.TagNumber(3)
@@ -224,5 +224,163 @@ class Message extends $pb.GeneratedMessage {
   $core.bool hasRead() => $_has(4);
   @$pb.TagNumber(5)
   void clearRead() => clearField(5);
+}
+
+class SignupRequest extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo('SignupRequest', package: const $pb.PackageName('proto'), createEmptyInstance: create)
+    ..aOM<User>(1, 'user', subBuilder: User.create)
+    ..hasRequiredFields = false
+  ;
+
+  SignupRequest._() : super();
+  factory SignupRequest() => create();
+  factory SignupRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory SignupRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  SignupRequest clone() => SignupRequest()..mergeFromMessage(this);
+  SignupRequest copyWith(void Function(SignupRequest) updates) => super.copyWith((message) => updates(message as SignupRequest));
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static SignupRequest create() => SignupRequest._();
+  SignupRequest createEmptyInstance() => create();
+  static $pb.PbList<SignupRequest> createRepeated() => $pb.PbList<SignupRequest>();
+  @$core.pragma('dart2js:noInline')
+  static SignupRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<SignupRequest>(create);
+  static SignupRequest _defaultInstance;
+
+  @$pb.TagNumber(1)
+  User get user => $_getN(0);
+  @$pb.TagNumber(1)
+  set user(User v) { setField(1, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasUser() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearUser() => clearField(1);
+  @$pb.TagNumber(1)
+  User ensureUser() => $_ensure(0);
+}
+
+class SignupResponse extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo('SignupResponse', package: const $pb.PackageName('proto'), createEmptyInstance: create)
+    ..aOB(1, 'done')
+    ..aOS(2, 'msg')
+    ..hasRequiredFields = false
+  ;
+
+  SignupResponse._() : super();
+  factory SignupResponse() => create();
+  factory SignupResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory SignupResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  SignupResponse clone() => SignupResponse()..mergeFromMessage(this);
+  SignupResponse copyWith(void Function(SignupResponse) updates) => super.copyWith((message) => updates(message as SignupResponse));
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static SignupResponse create() => SignupResponse._();
+  SignupResponse createEmptyInstance() => create();
+  static $pb.PbList<SignupResponse> createRepeated() => $pb.PbList<SignupResponse>();
+  @$core.pragma('dart2js:noInline')
+  static SignupResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<SignupResponse>(create);
+  static SignupResponse _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.bool get done => $_getBF(0);
+  @$pb.TagNumber(1)
+  set done($core.bool v) { $_setBool(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasDone() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearDone() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get msg => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set msg($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasMsg() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearMsg() => clearField(2);
+}
+
+class AddFriendRequest extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo('AddFriendRequest', package: const $pb.PackageName('proto'), createEmptyInstance: create)
+    ..aOS(1, 'id')
+    ..hasRequiredFields = false
+  ;
+
+  AddFriendRequest._() : super();
+  factory AddFriendRequest() => create();
+  factory AddFriendRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory AddFriendRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  AddFriendRequest clone() => AddFriendRequest()..mergeFromMessage(this);
+  AddFriendRequest copyWith(void Function(AddFriendRequest) updates) => super.copyWith((message) => updates(message as AddFriendRequest));
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static AddFriendRequest create() => AddFriendRequest._();
+  AddFriendRequest createEmptyInstance() => create();
+  static $pb.PbList<AddFriendRequest> createRepeated() => $pb.PbList<AddFriendRequest>();
+  @$core.pragma('dart2js:noInline')
+  static AddFriendRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<AddFriendRequest>(create);
+  static AddFriendRequest _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get id => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set id($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearId() => clearField(1);
+}
+
+class AddFriendResponse extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo('AddFriendResponse', package: const $pb.PackageName('proto'), createEmptyInstance: create)
+    ..aOB(1, 'done')
+    ..aOM<User>(2, 'user', subBuilder: User.create)
+    ..aOS(3, 'msg')
+    ..hasRequiredFields = false
+  ;
+
+  AddFriendResponse._() : super();
+  factory AddFriendResponse() => create();
+  factory AddFriendResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory AddFriendResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  AddFriendResponse clone() => AddFriendResponse()..mergeFromMessage(this);
+  AddFriendResponse copyWith(void Function(AddFriendResponse) updates) => super.copyWith((message) => updates(message as AddFriendResponse));
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static AddFriendResponse create() => AddFriendResponse._();
+  AddFriendResponse createEmptyInstance() => create();
+  static $pb.PbList<AddFriendResponse> createRepeated() => $pb.PbList<AddFriendResponse>();
+  @$core.pragma('dart2js:noInline')
+  static AddFriendResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<AddFriendResponse>(create);
+  static AddFriendResponse _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.bool get done => $_getBF(0);
+  @$pb.TagNumber(1)
+  set done($core.bool v) { $_setBool(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasDone() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearDone() => clearField(1);
+
+  @$pb.TagNumber(2)
+  User get user => $_getN(1);
+  @$pb.TagNumber(2)
+  set user(User v) { setField(2, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasUser() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearUser() => clearField(2);
+  @$pb.TagNumber(2)
+  User ensureUser() => $_ensure(1);
+
+  @$pb.TagNumber(3)
+  $core.String get msg => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set msg($core.String v) { $_setString(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasMsg() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearMsg() => clearField(3);
 }
 

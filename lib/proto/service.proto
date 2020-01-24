@@ -20,7 +20,7 @@ message Close {
 message User {
     string id=1;
     string name=2;
-    string profile_pic=3;
+    bytes profile_pic=3;
 }
 message Message {
     string sender_id=1;

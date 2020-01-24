@@ -19,3 +19,9 @@ class SubscribeEvent extends AppEvent{
   User get user=> _user;
 
 }
+class SignupEvent extends AppEvent{
+  User _user;
+  User get user=> _user;
+  SignupEvent(this._user);
+
+}

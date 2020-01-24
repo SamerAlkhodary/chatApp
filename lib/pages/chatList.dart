@@ -8,7 +8,7 @@ import 'package:chat/proto/service.pbgrpc.dart';
 import 'package:flutter/material.dart';
 
 class ChatListPage extends StatefulWidget{
-  var  image;
+  File  image;
    String name;
   ChatListPage({@required this.image, @required this.name,Key key}) : super(key: key);
 
@@ -27,7 +27,7 @@ class ChatListState extends State<ChatListPage>{
      _bloc= ServiceProvider.of(context);
      user= User()
   ..name= widget.name
-  ..profilePic="https://cdn0.gamesports.net/content_teasers/77000/77832.jpg?1545064880"
+  ..profilePic=widget.image.readAsBytesSync()
   ..id="1";
      _bloc.dispatch(SubscribeEvent(user));
   }

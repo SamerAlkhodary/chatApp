@@ -32,6 +32,12 @@ class ChatService{
     }
 
   }
+  Future<SignupResponse> signup(User user)async {
+    return  client.signup(SignupRequest()..user=user);
+
+
+
+  }
 
   
 }

@@ -8,8 +8,9 @@ class MsgRepository extends Repository{
     chatService= ChatService();
   }
   @override
-  void login() {
-    // TODO: implement login
+  Future<SignupResponse> signup(User user) {
+      return chatService.signup(user);
+    
   }
 
   @override
@@ -27,6 +28,12 @@ class MsgRepository extends Repository{
   Stream<Message> subscribe(User user) {
    
     return chatService.subscribeToService(user);
+  }
+
+  @override
+  User addContact(User user, String contactId) {
+   
+    return null;
   }
 
 }
