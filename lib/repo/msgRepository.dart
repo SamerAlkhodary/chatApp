@@ -31,9 +31,10 @@ class MsgRepository extends Repository{
   }
 
   @override
-  User addContact(User user, String contactId) {
+  Future<AddFriendResponse> addContact( String username) {
+    
    
-    return null;
+    return chatService.addContact(username);
   }
 
 }

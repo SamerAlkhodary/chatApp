@@ -5,6 +5,6 @@ abstract class Repository{
   Stream<Message> subscribe(User user);
   Future<SignupResponse> signup(User user);
   void logout();
-  User addContact(User user,String contactId);
+  Future<AddFriendResponse> addContact(String username);
   
 } 

@@ -1,6 +1,7 @@
 import 'package:chat/bloc/msgBloc.dart';
 import 'package:chat/pages/chatList.dart';
 import 'package:chat/pages/signupPage.dart';
+import 'package:chat/pages/startPage.dart';
 import 'package:flutter/material.dart';
 
 import 'bloc/blocProvider.dart';
@@ -32,6 +33,6 @@ MaterialApp materialApp (){
           // is not restarted.
           primarySwatch: Colors.blue,
         ),
-        home:  SignupPage()
+        home:  StartPage()
         );
 }

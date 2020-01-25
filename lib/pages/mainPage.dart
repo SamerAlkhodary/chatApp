@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:chat/bloc/blocProvider.dart';
 import 'package:chat/bloc/msgBloc.dart';
 import 'package:chat/model/appEvent.dart';
@@ -5,7 +7,8 @@ import 'package:chat/proto/service.pbgrpc.dart';
 import 'package:flutter/material.dart';
 
 class MyHomePage extends StatefulWidget {
-  String name, img, targetId, id;
+  String name, targetId, id;
+  Uint8List img;
 
   MyHomePage({
     @required this.id,
@@ -57,7 +60,7 @@ class _MyHomePageState extends State<MyHomePage> {
         leading: Hero(
             tag: widget.img,
             child: CircleAvatar(
-              backgroundImage: NetworkImage(widget.img),
+              backgroundImage: MemoryImage(widget.img),
             )),
         backgroundColor: Colors.lightBlueAccent,
         actions: <Widget>[

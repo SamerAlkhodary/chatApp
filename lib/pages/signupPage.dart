@@ -30,9 +30,7 @@ class SignupPageState extends State {
         child: StreamBuilder<User>(
           stream: _msgBloc.outUser,
           builder: (context, snapshot) {
-            if(snapshot.hasData){
-              navigate();
-            }
+            
             return ListView(
               children: <Widget>[
                 SizedBox(
@@ -111,18 +109,10 @@ class SignupPageState extends State {
     )
     
     );
+    
 
 
    
   }
-  void navigate(){
-     Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-            builder: (context) => ChatListPage(
-                  name: _controller.text,
-                  image: _image,
-                )));
-
-  }
+  
 }

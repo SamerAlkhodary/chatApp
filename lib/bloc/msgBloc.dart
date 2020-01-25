@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:chat/bloc/blocBase.dart';
 import 'package:chat/chatService.dart';
 import 'package:chat/model/appEvent.dart';
@@ -15,7 +17,7 @@ class MsgBloc extends BlocBase {
   List<Message> msgs = List();
   List<User> contacts = List();
   Observable<List<Message>> get outEvent => _msgController.stream;
-  Observable<List<Message>> get outContacts => _msgController.stream;
+  Observable<List<User>> get outContacts => _contactsController.stream;
   Observable<User> get outUser => _userController.stream;
   MsgBloc() {
     _msgRepository = MsgRepository();
@@ -40,6 +42,10 @@ class MsgBloc extends BlocBase {
         break;
       case SignupEvent:
         _signup((event as SignupEvent).user);
+        break;
+        case AddContactEvent:
+        _addContact( (event as AddContactEvent).username);
+        break;
     }
   }
 
@@ -67,7 +73,14 @@ class MsgBloc extends BlocBase {
         .listen((msg) => {msgs.add(msg), _msgController.add(msgs)});
   }
 
-  void _addContact(String id) {}
+  void _addContact(String username) {
+    _msgRepository.addContact(username).then((resp)=>resp.done?{
+      contacts.add(resp.user),_contactsController.add(contacts)
+    }:_contactsController.addError(prefix0.Error(resp.msg))
+    );
+
+
+  }
   
   
   void _signup(User user) {

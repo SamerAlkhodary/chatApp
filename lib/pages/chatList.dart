@@ -1,16 +1,19 @@
-import 'dart:io';
 
+import 'dart:async';
+import 'dart:typed_data';
 import 'package:chat/bloc/blocProvider.dart';
 import 'package:chat/bloc/msgBloc.dart';
 import 'package:chat/model/appEvent.dart';
+import 'package:chat/pages/addContactPage.dart';
 import 'package:chat/pages/mainPage.dart';
 import 'package:chat/proto/service.pbgrpc.dart';
 import 'package:flutter/material.dart';
+import 'package:protobuf/protobuf.dart';
+import 'package:rxdart/rxdart.dart';
 
 class ChatListPage extends StatefulWidget{
-  File  image;
-   String name;
-  ChatListPage({@required this.image, @required this.name,Key key}) : super(key: key);
+   User  user;
+  ChatListPage({@required this.user,Key key}) : super(key: key);
 
   
 
@@ -20,28 +23,26 @@ class ChatListPage extends StatefulWidget{
 }
 class ChatListState extends State<ChatListPage>{
   MsgBloc _bloc;
-  User user;
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
      _bloc= ServiceProvider.of(context);
-     user= User()
-  ..name= widget.name
-  ..profilePic=widget.image.readAsBytesSync()
-  ..id="1";
-     _bloc.dispatch(SubscribeEvent(user));
+     
+     _bloc.dispatch(SubscribeEvent(widget.user));
   }
   @override
   Widget build(BuildContext context) {
     
+   
+  
     return Scaffold(
-      //appBar: AppBar(leading: CircleAvatar(backgroundImage: NetworkImage("https://cdn0.gamesports.net/content_teasers/77000/77832.jpg?1545064880"),radius: 1.0,),title: Text("Contacts"),backgroundColor: Colors.lightBlueAccent,),
       body: Container(
         decoration: BoxDecoration(
           //color: Colors.red,
           color: Colors.lightBlueAccent
         ),
-        child: Column(
+        child: ListView(
           children: <Widget>[
           Container(
             padding: EdgeInsets.only(left: 20,top: 60),
@@ -52,13 +53,13 @@ class ChatListState extends State<ChatListPage>{
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 CircleAvatar(
-                  backgroundImage: FileImage(widget.image),radius: 30.0,
+                  backgroundImage:MemoryImage(widget.user.profilePic),radius: 30.0,
 
 
                 ),
                  Padding(
                    padding: EdgeInsets.only(left: 10),
-                   child: Text(user.name,style:TextStyle(fontWeight: FontWeight.bold,color: Colors.white ) ,),
+                   child: Text(widget.user.name,style:TextStyle(fontWeight: FontWeight.bold,color: Colors.white ) ,),
                  )
               ],
             ),
@@ -74,18 +75,19 @@ class ChatListState extends State<ChatListPage>{
               borderRadius: BorderRadius.only(topLeft: Radius.circular(60))
             ),
             
-            child: StreamBuilder<List<Message>>(
-              stream: _bloc.outEvent,
+            child: StreamBuilder<List<User>>(  
+               
+              stream: _bloc.outContacts,//Observable.merge([_bloc.outContacts,_bloc.outEvent]),
               builder: (context, snapshot) {
+                print(snapshot.data.runtimeType);
                 return ListView(
-                  children: <Widget>[
-                    _listElement("Anita","2",user.id,"https://yt3.ggpht.com/a/AGF-l7-a9lpgByp7WRiqArVeoR6K7QikEmtQ6sJWIA=s900-c-k-c0xffffffff-no-rj-mo",snapshot),
-                    Divider(),
-                    _listElement("Amer", "0",user.id,"https://click-storm.com/i/articles/0/2712/juggernautbyvivienkad6ulep7.jpg",snapshot),
-                    Divider(),
+                  children: 
+                    snapshot.hasData ?//&& snapshot.data is List<User> ? 
+                    snapshot.data.map((elem)=>_listElement(elem.name,elem.id,widget.user.id,Uint8List.fromList(elem.profilePic),snapshot)).toList():[Align(alignment: Alignment.center,child: Text("No connections"),)]
                     
                     
-                  ],
+                    
+                  
                 );
               }
             ),
@@ -96,13 +98,20 @@ class ChatListState extends State<ChatListPage>{
        
 
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: ()=> _addContactPressed(),
+        child: Icon(Icons.add),
+      ),
     );
   }
 
-  Widget _listElement(String name,String targetId,String id, String url,AsyncSnapshot<List<Message>>snapshot){
+  Widget _listElement(String name,String targetId,String id, Uint8List url,AsyncSnapshot<List<User>>snapshot){
+    print(name);
+    print(url);
+    print(id);
     List<Message> list = List();
-    if(snapshot.hasData){
-     list = snapshot.data.where((m)=> !m.read && m.senderId!=id && m.senderId==targetId).toList();
+    if(snapshot.hasData&& snapshot.data is List<Message>){
+    // list = snapshot.data.where((m )=> !(m as Message).read && (m as Message).senderId!=id && (m as Message).senderId==targetId).toList();
     }
 
 
@@ -112,7 +121,7 @@ class ChatListState extends State<ChatListPage>{
               child: ListTile(leading: Hero(
                 tag:url,
                 child:CircleAvatar(
-              backgroundImage: NetworkImage(url),
+              backgroundImage: MemoryImage(url),
              
 
             )),title: Text(name,style: TextStyle(fontWeight: FontWeight.bold),),
@@ -129,12 +138,22 @@ class ChatListState extends State<ChatListPage>{
             );
 
 }
- void _chatPressed(String name, String img,String targetId,String id,BuildContext context){
+ void _chatPressed(String name, Uint8List img,String targetId,String id,BuildContext context){
   Navigator.push(context,MaterialPageRoute(
     builder: (context)=> MyHomePage(id: id,name:name,img:img,targetId:targetId ,)
   ));
 
          
+}
+void _addContactPressed(){
+  showDialog(
+    context: context,
+    barrierDismissible: true,
+    builder: (context){
+      return AddContact(_bloc);
+    }
+  );
+
 }
 
 

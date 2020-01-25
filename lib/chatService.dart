@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:chat/proto/service.pbgrpc.dart';
+import 'package:crypto/crypto.dart';
 import 'package:grpc/grpc.dart' as prefix0;
 import 'package:grpc/service_api.dart';
 
@@ -9,7 +12,7 @@ class ChatService{
   ChatService(){
     client= MessingerClient(
       prefix0.ClientChannel(
-       emulator,
+       phone,
         port:8080,
         options: prefix0.ChannelOptions(
           credentials: prefix0.ChannelCredentials.insecure()
@@ -33,11 +36,21 @@ class ChatService{
 
   }
   Future<SignupResponse> signup(User user)async {
-    return  client.signup(SignupRequest()..user=user);
+    user..id= sha1.convert(utf8.encode(user.name)).toString();
+    return  client.signup(SignupRequest()..user=user
+    
+    );
 
 
 
   }
+
+   Future<AddFriendResponse> addContact(String username)async {
+     return client.addFriend(AddFriendRequest()..id= sha1.convert(utf8.encode(username)).toString());
+    
+  }
+  
+
 
   
 }

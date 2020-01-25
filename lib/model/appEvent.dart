@@ -25,3 +25,8 @@ class SignupEvent extends AppEvent{
   SignupEvent(this._user);
 
 }
+class AddContactEvent extends AppEvent{
+  String _username;
+  AddContactEvent(this._username);
+  String get username => _username;
+}
