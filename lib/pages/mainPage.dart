@@ -58,7 +58,7 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         elevation: 2,
         leading: Hero(
-            tag: widget.img,
+            tag: widget.targetId,
             child: CircleAvatar(
               backgroundImage: MemoryImage(widget.img),
             )),
@@ -76,7 +76,7 @@ class _MyHomePageState extends State<MyHomePage> {
         children: <Widget>[
           Container(
             height: MediaQuery.of(context).size.height,
-            width: 500,
+            width: MediaQuery.of(context).size.width,
             child: Image.network(
               "https://mir-s3-cdn-cf.behance.net/project_modules/disp/1ce52173426833.5c08f56353039.png",
               alignment: Alignment.topLeft,
@@ -124,17 +124,20 @@ class _MyHomePageState extends State<MyHomePage> {
                     child: Row(
                       children: <Widget>[
                         Container(
-                          width: MediaQuery.of(context).size.width * 0.85,
+                          width: MediaQuery.of(context).size.width * 0.82,
                           child: TextField(
                             controller: _controllerSend,
                             decoration:
                                 InputDecoration(hintText: "Type a message"),
                           ),
                         ),
-                        IconButton(
-                          icon: Icon(Icons.send),
-                          onPressed: () => onSend(),
-                          iconSize: 15,
+                        Container(
+                          width: MediaQuery.of(context).size.width*0.15,
+                          child: IconButton(
+                            icon: Icon(Icons.send),
+                            onPressed: () => onSend(),
+                            iconSize: 15,
+                          ),
                         )
                       ],
                     ),

@@ -70,13 +70,13 @@ class MsgBloc extends BlocBase {
   void _receiveMessage(User user) {
     _msgRepository
         .subscribe(user)
-        .listen((msg) => {msgs.add(msg), _msgController.add(msgs)});
+        .listen((msg) => {msgs.add(msg), _msgController.add(msgs),_contactsController.add(contacts)});
   }
 
   void _addContact(String username) {
-    _msgRepository.addContact(username).then((resp)=>resp.done?{
-      contacts.add(resp.user),_contactsController.add(contacts)
-    }:_contactsController.addError(prefix0.Error(resp.msg))
+    _msgRepository.addContact(username).then((resp)=>resp.done
+    ?{contacts.add(resp.user),_contactsController.add(contacts)}
+    :{_contactsController.addError(prefix0.Error(resp.msg)),_contactsController.add(contacts)}
     );
 
 

@@ -1,5 +1,7 @@
 import 'package:chat/bloc/msgBloc.dart';
 import 'package:chat/model/appEvent.dart';
+import 'package:chat/model/error.dart' as prefix0;
+import 'package:chat/proto/service.pbgrpc.dart';
 import 'package:flutter/material.dart';
 
 class AddContact extends StatefulWidget {
@@ -22,62 +24,69 @@ class AddContactState extends State<AddContact> {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20.0),
         ),
-        child: ListView(
-          children: <Widget>[
-            Container(
-              height: MediaQuery.of(context).size.height / 3 * 0.30,
-              child: Padding(
-                      padding: const EdgeInsets.all(20.0),
-                      child: Align(
-                          alignment: Alignment.topCenter,
-                          child: Text(
-                            "Add Contact",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold),
-                          )),
-                    ),
-            ),
-            Container(
-                height: MediaQuery.of(context).size.height / 3 * 0.7,
-                width: MediaQuery.of(context).size.width * 0.80,
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.only(
-                        bottomRight: Radius.circular(20.0),
-                        bottomLeft: Radius.circular(20.0))),
-                child: ListView(
-                  children: <Widget>[
-                    SizedBox(height: 20,),
-                    
-                    Padding(
-                      padding: EdgeInsets.all(10),
-                      child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20.0),
-                          ),
-                          child: TextField(
-                            controller: _controller,
-                            decoration: InputDecoration(labelText: "username"),
-                          )),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top:30.0),
-                      child: Align(
-                        alignment: Alignment.center,
-                        child: RaisedButton(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          color: Colors.lightBlueAccent,
-                          onPressed: () => _addPressed(),
-                          child: Text("Add"),
+        child: StreamBuilder<List<User>>(
+          stream: widget._msgBloc.outContacts,
+          builder: (context, snapshot) {
+            return ListView(
+              children: <Widget>[
+                Container(
+                  height: MediaQuery.of(context).size.height / 3 * 0.30,
+                  child: Padding(
+                          padding: const EdgeInsets.all(20.0),
+                          child: Align(
+                              alignment: Alignment.topCenter,
+                              child: Text(
+                                "Add Contact",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold),
+                              )),
                         ),
-                      ),
-                    )
-                  ],
-                )),
-          ],
+                ),
+                Container(
+                    height: MediaQuery.of(context).size.height / 3 * 0.7,
+                    width: MediaQuery.of(context).size.width * 0.80,
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.only(
+                            bottomRight: Radius.circular(20.0),
+                            bottomLeft: Radius.circular(20.0))),
+                    child: ListView(
+                      children: <Widget>[
+                        SizedBox(height: 20,),
+                        
+                        Padding(
+                          padding: EdgeInsets.all(10),
+                          child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20.0),
+                              ),
+                              child: TextField(
+                                controller: _controller,
+                                decoration: InputDecoration(
+                                  labelText: "username"
+                                  , errorText: snapshot.hasError? (snapshot.error as prefix0.Error).message :null),
+                              )),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top:30.0),
+                          child: Align(
+                            alignment: Alignment.center,
+                            child: RaisedButton(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              color: Colors.lightBlueAccent,
+                              onPressed: () => _addPressed(snapshot),
+                              child: Text("Add"),
+                            ),
+                          ),
+                        )
+                      ],
+                    )),
+              ],
+            );
+          }
         ),
       ),
     );
@@ -85,11 +94,13 @@ class AddContactState extends State<AddContact> {
   @override
   void dispose() {
     _controller.dispose();
-    // TODO: implement dispose
     super.dispose();
   }
-  void _addPressed(){
+  void _addPressed(AsyncSnapshot<List<User>> snapshot){
+    
     widget._msgBloc.dispatch(AddContactEvent(_controller.text.trim().toLowerCase()));
+    !snapshot.hasError?Navigator.pop(context):null;
+    //Navigator.pop(context);
 
 
   }

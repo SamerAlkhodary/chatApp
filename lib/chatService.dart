@@ -36,7 +36,7 @@ class ChatService{
 
   }
   Future<SignupResponse> signup(User user)async {
-    user..id= sha1.convert(utf8.encode(user.name)).toString();
+    user..id= sha1.convert(utf8.encode(user.name.trim().toLowerCase())).toString();
     return  client.signup(SignupRequest()..user=user
     
     );
