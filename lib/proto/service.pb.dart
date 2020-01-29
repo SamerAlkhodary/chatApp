@@ -162,6 +162,7 @@ class Message extends $pb.GeneratedMessage {
     ..aOS(3, 'body')
     ..aOS(4, 'timestamp')
     ..aOB(5, 'read')
+    ..a<$core.List<$core.int>>(6, 'image', $pb.PbFieldType.OY)
     ..hasRequiredFields = false
   ;
 
@@ -224,6 +225,15 @@ class Message extends $pb.GeneratedMessage {
   $core.bool hasRead() => $_has(4);
   @$pb.TagNumber(5)
   void clearRead() => clearField(5);
+
+  @$pb.TagNumber(6)
+  $core.List<$core.int> get image => $_getN(5);
+  @$pb.TagNumber(6)
+  set image($core.List<$core.int> v) { $_setBytes(5, v); }
+  @$pb.TagNumber(6)
+  $core.bool hasImage() => $_has(5);
+  @$pb.TagNumber(6)
+  void clearImage() => clearField(6);
 }
 
 class SignupRequest extends $pb.GeneratedMessage {

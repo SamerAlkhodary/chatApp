@@ -16,6 +16,9 @@ class AddContactState extends State<AddContact> {
   @override
   Widget build(BuildContext context) {
     return Dialog(
+      insetAnimationCurve: Curves.bounceIn,
+      
+      
       backgroundColor: Colors.lightBlueAccent,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       child: Container(
@@ -53,7 +56,7 @@ class AddContactState extends State<AddContact> {
                             bottomLeft: Radius.circular(20.0))),
                     child: ListView(
                       children: <Widget>[
-                        SizedBox(height: 20,),
+                        SizedBox(height: 15,),
                         
                         Padding(
                           padding: EdgeInsets.all(10),
@@ -69,7 +72,7 @@ class AddContactState extends State<AddContact> {
                               )),
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(top:30.0),
+                          padding: const EdgeInsets.only(top:24),
                           child: Align(
                             alignment: Alignment.center,
                             child: RaisedButton(
@@ -99,7 +102,6 @@ class AddContactState extends State<AddContact> {
   void _addPressed(AsyncSnapshot<List<User>> snapshot){
     
     widget._msgBloc.dispatch(AddContactEvent(_controller.text.trim().toLowerCase()));
-    !snapshot.hasError?Navigator.pop(context):null;
     //Navigator.pop(context);
 
 

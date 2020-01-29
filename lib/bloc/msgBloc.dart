@@ -70,14 +70,28 @@ class MsgBloc extends BlocBase {
   void _receiveMessage(User user) {
     _msgRepository
         .subscribe(user)
-        .listen((msg) => {msgs.add(msg), _msgController.add(msgs),_contactsController.add(contacts)});
+        .listen((msg) => {msgs.add(msg), _msgController.add(msgs)});
   }
 
   void _addContact(String username) {
-    _msgRepository.addContact(username).then((resp)=>resp.done
+    var notExist=contacts.every((c)=>c.name.toLowerCase()!=username.toLowerCase());
+    if(user.name==username){
+            _contactsController.addError(prefix0.Error("You can not add yourself"));
+            return;
+
+    }
+    if(notExist){
+      _msgRepository.addContact(username).then((resp)=>resp.done
     ?{contacts.add(resp.user),_contactsController.add(contacts)}
-    :{_contactsController.addError(prefix0.Error(resp.msg)),_contactsController.add(contacts)}
+    :{_contactsController.addError(prefix0.Error(resp.msg))}
     );
+
+    }
+    else{
+      _contactsController.addError(prefix0.Error("User is already added "));
+      return;
+    }
+    
 
 
   }

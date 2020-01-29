@@ -5,6 +5,7 @@ import 'package:chat/bloc/msgBloc.dart';
 import 'package:chat/model/appEvent.dart';
 import 'package:chat/proto/service.pbgrpc.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class MyHomePage extends StatefulWidget {
   String name, targetId, id;
@@ -124,11 +125,19 @@ class _MyHomePageState extends State<MyHomePage> {
                     child: Row(
                       children: <Widget>[
                         Container(
-                          width: MediaQuery.of(context).size.width * 0.82,
+                          width: MediaQuery.of(context).size.width * 0.65,
                           child: TextField(
                             controller: _controllerSend,
                             decoration:
                                 InputDecoration(hintText: "Type a message"),
+                          ),
+                        ),
+                          Container(
+                          width: MediaQuery.of(context).size.width*0.15,
+                          child: IconButton(
+                            icon: Icon(Icons.perm_media),
+                            onPressed: () => getImage(),
+                            iconSize: 15,
                           ),
                         ),
                         Container(
@@ -150,7 +159,12 @@ class _MyHomePageState extends State<MyHomePage> {
       )),
     );
   }
+  Future getImage() async {
+    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+    
 
+   
+  }
   void onSend() {
     _msgBloc.dispatch(SendMsgEvent(
         _controllerSend.text, this.widget.id, this.widget.targetId));

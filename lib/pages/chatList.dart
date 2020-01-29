@@ -20,6 +20,14 @@ class ChatListPage extends StatefulWidget {
 
 class ChatListState extends State<ChatListPage> {
   MsgBloc _bloc;
+  List<User> contactList;
+  List<Message> msgList;
+  @override
+  void initState() {
+    contactList = List();
+    msgList = List();
+    super.initState();
+  }
 
   @override
   void didChangeDependencies() {
@@ -71,21 +79,24 @@ class ChatListState extends State<ChatListPage> {
                       color: Colors.white,
                       borderRadius:
                           BorderRadius.only(topLeft: Radius.circular(60))),
-                  child: StreamBuilder(
-                      stream:
-                          Observable.merge([_bloc.outContacts, _bloc.outEvent]),
+                  child: StreamBuilder<List<User>>(
+                      stream: _bloc.outContacts,
                       builder: (context, snapshot) {
                         print(snapshot.data.runtimeType);
-                        return ListView(
-                            children: snapshot.hasData
-                                ? _listElement(widget.user.id, snapshot)
-                                : [
-                                    Align(
-                                      alignment: Alignment.center,
-                                      child: Text("No connections"),
-                                    )
-                                  ]);
-                                  
+                        if (snapshot.hasData) {
+                          contactList = snapshot.data;
+                        }
+                        List listElem= _listElement(widget.user.id, contactList, _bloc.outEvent);
+                        return ListView.separated(
+                          
+                          itemCount: contactList.length,
+                          itemBuilder:(context,index){
+                            return listElem[index];
+                          }, separatorBuilder: (BuildContext context, int index) {
+                            return Divider(thickness: 3,);
+                            
+                          },
+                           );
                       }),
                 ),
               ),
@@ -98,28 +109,12 @@ class ChatListState extends State<ChatListPage> {
     );
   }
 
-  List<Widget> _listElement(String id, AsyncSnapshot snapshot) {
-    List<Message> msgList = List();
-    List<User> contactList = List();
-
-    if (snapshot.data is List<Message>) {
-      msgList = snapshot.data;
-      //list = snapshot.data.where((m )=> !(m as Message).read && (m as Message).senderId!=id && (m as Message).senderId==targetId).toList();
-    }
-
-    if (snapshot.data is List<User>) {
-      contactList = snapshot.data;
-      print(contactList.length);
-    }
-
+  List<Widget> _listElement(
+      String id, List<User> contactList, Observable<List<Message>> stream) {
+    print(contactList.length);
     return contactList.map((contact) {
-      msgList = msgList
-          .where((m) => !m.read && m.senderId != id && m.senderId == contact.id)
-          .toList();
-
       return Container(
-        decoration: BoxDecoration(
-            border: Border(bottom: BorderSide(width: 0.5, color: Colors.grey))),
+        
         padding: EdgeInsets.only(top: 10),
         height: MediaQuery.of(context).size.height * 0.75 / 6,
         child: Center(
@@ -128,7 +123,7 @@ class ChatListState extends State<ChatListPage> {
               leading: Hero(
                   tag: contact.id,
                   child: CircleAvatar(
-                    radius: 35,
+                    radius: 30,
                     backgroundImage:
                         MemoryImage(Uint8List.fromList(contact.profilePic)),
                   )),
@@ -142,22 +137,34 @@ class ChatListState extends State<ChatListPage> {
                   contact.id,
                   id,
                   context),
-              trailing: msgList.isNotEmpty
-                  ? Container(
-                      decoration: BoxDecoration(
-                          shape: BoxShape.circle, color: Colors.red[300]),
-                      width: 20,
-                      height: 20,
-                      child: Center(
-                        child: Text(
-                          msgList.length.toString(),
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      ))
-                  : Container(
-                      width: 10,
-                      height: 10,
-                    )),
+              trailing: StreamBuilder<List<Message>>(
+                  stream: stream,
+                  builder: (context, snapshot) {
+                    List msgList=List();
+                    if(snapshot.hasData)
+                    msgList = snapshot.data
+                        .where((m) =>
+                            !m.read &&
+                            m.senderId != id &&
+                            m.senderId == contact.id)
+                        .toList();
+                    return msgList.isNotEmpty
+                        ? Container(
+                            decoration: BoxDecoration(
+                                shape: BoxShape.circle, color: Colors.red[300]),
+                            width: 20,
+                            height: 20,
+                            child: Center(
+                              child: Text(
+                                msgList.length.toString(),
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ))
+                        : Container(
+                            width: 10,
+                            height: 10,
+                          );
+                  })),
         ),
       );
     }).toList();
@@ -178,8 +185,8 @@ class ChatListState extends State<ChatListPage> {
 
   void _addContactPressed() {
     showDialog(
+        
         context: context,
-        barrierDismissible: true,
         builder: (context) {
           return AddContact(_bloc);
         });

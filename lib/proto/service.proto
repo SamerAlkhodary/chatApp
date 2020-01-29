@@ -23,12 +23,13 @@ message User {
     bytes profile_pic=3;
 }
 message Message {
+    
     string sender_id=1;
     string target_id=2;
     string body=3;
     string timestamp=4;
     bool read=5;
-
+    bytes image=6;
 }
 message SignupRequest{
     User user=1;

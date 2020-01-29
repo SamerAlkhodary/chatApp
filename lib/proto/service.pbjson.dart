@@ -41,6 +41,7 @@ const Message$json = const {
     const {'1': 'body', '3': 3, '4': 1, '5': 9, '10': 'body'},
     const {'1': 'timestamp', '3': 4, '4': 1, '5': 9, '10': 'timestamp'},
     const {'1': 'read', '3': 5, '4': 1, '5': 8, '10': 'read'},
+    const {'1': 'image', '3': 6, '4': 1, '5': 12, '10': 'image'},
   ],
 };
 
