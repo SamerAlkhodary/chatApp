@@ -38,7 +38,7 @@ class _MyHomePageState extends State<MyHomePage> {
   TextEditingController _controllerSend = TextEditingController();
   double msgBoxWidth;
   ScrollController _scrollController = ScrollController();
-  
+  Uint8List image=Uint8List.fromList(List());
   List<Message> messages = List();
   @override
   void initState() {
@@ -55,6 +55,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
       appBar: AppBar(
         elevation: 2,
@@ -160,15 +161,14 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
   Future getImage() async {
-    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
-    
-
+     image = await ImagePicker.pickImage(source: ImageSource.gallery).then((f)=>f.readAsBytesSync());
    
   }
   void onSend() {
     _msgBloc.dispatch(SendMsgEvent(
-        _controllerSend.text, this.widget.id, this.widget.targetId));
+        _controllerSend.text, this.widget.id, this.widget.targetId,image));
         FocusScope.of(context).requestFocus(FocusNode());
+        image=Uint8List.fromList(List());
 
     print(_controllerSend.text);
     _controllerSend.clear();
@@ -186,7 +186,7 @@ class _MyHomePageState extends State<MyHomePage> {
         padding: EdgeInsets.only(left: 5, right: 5, top: 5, bottom: 5),
         child: Container(
           padding: EdgeInsets.all(10),
-          constraints: BoxConstraints(minWidth: 100, maxWidth: 300),
+          constraints: BoxConstraints(minWidth: MediaQuery.of(context).size.width*0.3, maxWidth: MediaQuery.of(context).size.width*0.5 ),
           decoration: BoxDecoration(
               boxShadow: [
                 BoxShadow(
@@ -207,18 +207,35 @@ class _MyHomePageState extends State<MyHomePage> {
                       userSender ? Radius.circular(0) : Radius.circular(5),
                   bottomLeft:
                       userSender ? Radius.circular(5) : Radius.circular(0))),
-          child: RichText(
-            textAlign: TextAlign.justify,
-            text: TextSpan(children: <TextSpan>[
-              TextSpan(
-                text: msg.body,
-                style: TextStyle(fontSize: 14, color: Colors.black),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            
+            //shrinkWrap: true,
+            children: <Widget>[
+              RichText(
+                textAlign: TextAlign.justify,
+                text: TextSpan(children: <TextSpan>[
+                  TextSpan(
+                    text: msg.body,
+                    style: TextStyle(fontSize: 14, color: Colors.black),
+                  ),
+                  
+                ]),
               ),
-              TextSpan(
-                text: "\n" + msg.timestamp,
-                style: TextStyle(fontSize: 10, color: Colors.black),
-              )
-            ]),
+              msg.image.isNotEmpty?Container(
+                padding: EdgeInsets.all(4),
+                width: MediaQuery.of(context).size.width*0.5,
+                height: MediaQuery.of(context).size.width*0.6,
+                child: Image.memory(Uint8List.fromList(msg.image)),):Container(),
+                RichText(
+                  text: TextSpan(
+                    text: "\n" + msg.timestamp,
+                    style: TextStyle(fontSize: 10, color: Colors.black),
+                  )
+                )
+            ],
+
           ),
         ),
       ),

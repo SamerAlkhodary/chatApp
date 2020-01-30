@@ -33,7 +33,7 @@ class MsgBloc extends BlocBase {
     switch (event.runtimeType) {
       case SendMsgEvent:
         _sendMessage((event as SendMsgEvent).msg, (event as SendMsgEvent).id,
-            (event as SendMsgEvent).target);
+            (event as SendMsgEvent).target,(event as SendMsgEvent).image);
 
         break;
       case SubscribeEvent:
@@ -49,7 +49,7 @@ class MsgBloc extends BlocBase {
     }
   }
 
-  void _sendMessage(String msg, String id, String dest) {
+  void _sendMessage(String msg, String id, String dest,Uint8List image) {
     print("msg: " + msg);
     print("id: " + id);
     print("target: " + dest);
@@ -58,6 +58,7 @@ class MsgBloc extends BlocBase {
         ..body = msg
         ..senderId = id
         ..targetId = dest
+        ..image=image
         ..timestamp = DateTime.now().toString().substring(0, 16);
 
       msgs.add(message);
