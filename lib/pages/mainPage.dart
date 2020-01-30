@@ -215,7 +215,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 style: TextStyle(fontSize: 14, color: Colors.black),
               ),
               TextSpan(
-                text: "\n" + msg.timestamp,
+                text: "\n" + msg.timestamp.substring(0, 16),
                 style: TextStyle(fontSize: 10, color: Colors.black),
               )
             ]),

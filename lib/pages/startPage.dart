@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:chat/bloc/blocProvider.dart';
 import 'package:chat/bloc/msgBloc.dart';
+import 'package:chat/model/appEvent.dart';
 import 'package:chat/pages/chatList.dart';
 import 'package:chat/pages/signupPage.dart';
 import 'package:flutter/material.dart';
@@ -29,7 +30,7 @@ class _StartPageState extends State<StartPage> {
     super.didChangeDependencies();
     widget.userBloc= ServiceProvider.of(context);
 
-
+    widget.userBloc.dispatch(StartUpEvent());
     widget.userBloc.outUser.
     listen((user) {
       if(this.mounted){

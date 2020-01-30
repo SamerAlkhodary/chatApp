@@ -7,7 +7,6 @@ import 'package:chat/pages/addContactPage.dart';
 import 'package:chat/pages/mainPage.dart';
 import 'package:chat/proto/service.pbgrpc.dart';
 import 'package:flutter/material.dart';
-import 'package:protobuf/protobuf.dart';
 import 'package:rxdart/rxdart.dart';
 
 class ChatListPage extends StatefulWidget {
@@ -86,17 +85,19 @@ class ChatListState extends State<ChatListPage> {
                         if (snapshot.hasData) {
                           contactList = snapshot.data;
                         }
-                        List listElem= _listElement(widget.user.id, contactList, _bloc.outEvent);
+                        List listElem = _listElement(
+                            widget.user.id, contactList, _bloc.outEvent);
                         return ListView.separated(
-                          
                           itemCount: contactList.length,
-                          itemBuilder:(context,index){
+                          itemBuilder: (context, index) {
                             return listElem[index];
-                          }, separatorBuilder: (BuildContext context, int index) {
-                            return Divider(thickness: 3,);
-                            
                           },
-                           );
+                          separatorBuilder: (BuildContext context, int index) {
+                            return Divider(
+                              thickness: 2,
+                            );
+                          },
+                        );
                       }),
                 ),
               ),
@@ -114,7 +115,6 @@ class ChatListState extends State<ChatListPage> {
     print(contactList.length);
     return contactList.map((contact) {
       return Container(
-        
         padding: EdgeInsets.only(top: 10),
         height: MediaQuery.of(context).size.height * 0.75 / 6,
         child: Center(
@@ -140,14 +140,16 @@ class ChatListState extends State<ChatListPage> {
               trailing: StreamBuilder<List<Message>>(
                   stream: stream,
                   builder: (context, snapshot) {
-                    List msgList=List();
-                    if(snapshot.hasData)
-                    msgList = snapshot.data
-                        .where((m) =>
-                            !m.read &&
-                            m.senderId != id &&
-                            m.senderId == contact.id)
-                        .toList();
+                    List msgList = List();
+                    if (snapshot.hasData) {
+                      msgList = snapshot.data
+                          .where((m) =>
+                              !m.read &&
+                              m.senderId != id &&
+                              m.senderId == contact.id)
+                          .toList();
+                    }
+
                     return msgList.isNotEmpty
                         ? Container(
                             decoration: BoxDecoration(
@@ -185,7 +187,6 @@ class ChatListState extends State<ChatListPage> {
 
   void _addContactPressed() {
     showDialog(
-        
         context: context,
         builder: (context) {
           return AddContact(_bloc);

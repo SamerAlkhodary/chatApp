@@ -30,3 +30,6 @@ class AddContactEvent extends AppEvent{
   AddContactEvent(this._username);
   String get username => _username;
 }
+class StartUpEvent extends AppEvent{
+
+}

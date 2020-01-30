@@ -6,6 +6,7 @@ import 'package:chat/model/appEvent.dart';
 import 'package:chat/model/error.dart' as prefix0;
 import 'package:chat/proto/service.pb.dart';
 import 'package:chat/repo/msgRepository.dart';
+import 'package:chat/repo/saver.dart';
 import 'package:rxdart/rxdart.dart';
 
 class MsgBloc extends BlocBase {
@@ -46,19 +47,19 @@ class MsgBloc extends BlocBase {
         case AddContactEvent:
         _addContact( (event as AddContactEvent).username);
         break;
+        case StartUpEvent:
+        _startUp();
     }
   }
 
   void _sendMessage(String msg, String id, String dest) {
-    print("msg: " + msg);
-    print("id: " + id);
-    print("target: " + dest);
+  
     if (msg.isNotEmpty) {
       Message message = Message()
         ..body = msg
         ..senderId = id
         ..targetId = dest
-        ..timestamp = DateTime.now().toString().substring(0, 16);
+        ..timestamp = DateTime.now().toString();
 
       msgs.add(message);
       _msgController.add(msgs);
@@ -82,7 +83,7 @@ class MsgBloc extends BlocBase {
     }
     if(notExist){
       _msgRepository.addContact(username).then((resp)=>resp.done
-    ?{contacts.add(resp.user),_contactsController.add(contacts)}
+    ?{contacts.add(resp.user),_contactsController.add(contacts),Saver.saveContac(resp.user)}
     :{_contactsController.addError(prefix0.Error(resp.msg))}
     );
 
@@ -96,10 +97,16 @@ class MsgBloc extends BlocBase {
 
   }
   
-  
+  void _startUp()async{
+    var user = await Loader.loadUser();
+    if(user!=null){
+     this.user=user;
+      _userController.add(user);
+    }
+  }
   void _signup(User user) {
     _msgRepository.signup(user).then((resp) => resp.done
-        ? {this.user=user, _userController.add(user)}
+        ? {this.user=user, _userController.add(user),Saver.saveUser(user)}
         : _userController.addError(prefix0.Error(resp.msg)));
   }
 }
