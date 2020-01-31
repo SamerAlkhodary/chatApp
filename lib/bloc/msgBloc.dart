@@ -11,7 +11,7 @@ import 'package:rxdart/rxdart.dart';
 
 class MsgBloc extends BlocBase {
   final _msgController = BehaviorSubject<List<Message>>();
-  final _contactsController = BehaviorSubject<List<User>>();
+  final _contactsController = PublishSubject<List<User>>();
   final _userController = BehaviorSubject<User>();
   MsgRepository _msgRepository;
   User user;
@@ -34,7 +34,7 @@ class MsgBloc extends BlocBase {
     switch (event.runtimeType) {
       case SendMsgEvent:
         _sendMessage((event as SendMsgEvent).msg, (event as SendMsgEvent).id,
-            (event as SendMsgEvent).target);
+            (event as SendMsgEvent).target,(event as SendMsgEvent).image);
 
         break;
       case SubscribeEvent:
@@ -49,16 +49,18 @@ class MsgBloc extends BlocBase {
         break;
         case StartUpEvent:
         _startUp();
+        break;
     }
   }
 
-  void _sendMessage(String msg, String id, String dest) {
-  
+  void _sendMessage(String msg, String id, String dest,Uint8List image) {
+
     if (msg.isNotEmpty) {
       Message message = Message()
         ..body = msg
         ..senderId = id
         ..targetId = dest
+        ..image=image
         ..timestamp = DateTime.now().toString();
 
       msgs.add(message);
@@ -83,7 +85,7 @@ class MsgBloc extends BlocBase {
     }
     if(notExist){
       _msgRepository.addContact(username).then((resp)=>resp.done
-    ?{contacts.add(resp.user),_contactsController.add(contacts),Saver.saveContac(resp.user)}
+    ?{contacts.add(resp.user),_contactsController.add(contacts),Saver.saveContact(contacts)}
     :{_contactsController.addError(prefix0.Error(resp.msg))}
     );
 
@@ -102,7 +104,12 @@ class MsgBloc extends BlocBase {
     if(user!=null){
      this.user=user;
       _userController.add(user);
+      var contacts= await Loader.loadContact();
+      if(contacts!=null){this.contacts=contacts;_contactsController.add(contacts);
+
     }
+
+  }
   }
   void _signup(User user) {
     _msgRepository.signup(user).then((resp) => resp.done

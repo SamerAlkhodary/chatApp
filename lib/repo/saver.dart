@@ -2,20 +2,24 @@
 import 'dart:io';
 
 import 'package:chat/proto/service.pbgrpc.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:path_provider/path_provider.dart';
 
 class Saver{
-  static Future<void> saveContac(User user) async{
+  static Future<void> saveContact(List<User> contacts) async{
     final dir= await getApplicationDocumentsDirectory();
     final file = File("${dir.path}/contacts.txt");
-    file.writeAsString(user.writeToJson(),mode:FileMode.append);
+    var list=contacts.map((c)=> c.writeToJson()).toList();
+    var s=list.join(" ");
+
+    file.writeAsString(s);
 
     
   }
   static Future<void> saveUser(User user) async{
     final dir= await getApplicationDocumentsDirectory();
     final file = File("${dir.path}/user.txt");
-    file.writeAsString(user.writeToJson(),mode:FileMode.append);
+    file.writeAsString(user.writeToJson());
 
     
   }
@@ -29,14 +33,24 @@ class Saver{
 
 }
 class Loader{
-  static Future<User> loadContact()async{
+  static Future<List<User>> loadContact()async{
     final dir= await getApplicationDocumentsDirectory();
-    final file = File("${dir.path}/contacts.txt");
+    try{
+      final file = File("${dir.path}/contacts.txt");
+
 
     var jsonData= await file.readAsString();
-    print("data: "+ jsonData);
+    var stringList= jsonData.split(" ");
+    print(stringList.length);
+    return stringList.map((e)=> User.fromJson(e)).toList();
+    
 
-    return User.fromJson(jsonData);
+    }catch(e ){
+      print(e);
+      return null;
+
+    }
+    
 
   }
   static Future<User> loadUser()async{

@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:chat/proto/service.pbgrpc.dart';
 
 abstract class AppEvent{
@@ -7,9 +9,11 @@ class SendMsgEvent extends AppEvent{
   String _msg;
   String _id;
   String _target;
-  SendMsgEvent(this._msg,this._id,this._target);
+  Uint8List _image;
+  SendMsgEvent(this._msg,this._id,this._target ,this._image);
   String  get msg=> _msg;
    String  get id=> _id;
+   Uint8List get image=>_image;
     String  get target=> _target;
 
 }

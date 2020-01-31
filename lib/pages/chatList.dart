@@ -35,9 +35,11 @@ class ChatListState extends State<ChatListPage> {
 
     _bloc.dispatch(SubscribeEvent(widget.user));
   }
+  
 
   @override
   Widget build(BuildContext context) {
+    print("building");
     return Scaffold(
       body: Container(
           decoration: BoxDecoration(
