@@ -33,7 +33,7 @@ message Message {
 }
 message Media {
     oneof data{
-        bytes image=0;
+        bytes image=1;
         bytes video=2;
 
     }
