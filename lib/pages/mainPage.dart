@@ -1,11 +1,15 @@
+import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:chat/bloc/blocProvider.dart';
 import 'package:chat/bloc/msgBloc.dart';
 import 'package:chat/model/appEvent.dart';
+import 'package:chat/pages/mediaHandler.dart';
 import 'package:chat/proto/service.pbgrpc.dart';
+import 'package:chat/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:scroll_to_index/scroll_to_index.dart';
 
 class MyHomePage extends StatefulWidget {
   String name, targetId, id;
@@ -33,29 +37,27 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  
   MsgBloc _msgBloc;
   TextEditingController _controllerSend = TextEditingController();
   double msgBoxWidth;
-  ScrollController _scrollController = ScrollController();
-  Uint8List image=Uint8List.fromList(List());
+  ScrollController _scrollController;
+  Uint8List image = Uint8List.fromList(List());
   List<Message> messages = List();
   @override
   void initState() {
     super.initState();
     msgBoxWidth = 100;
+    _scrollController = ScrollController();
   }
 
   @override
   void didChangeDependencies() {
-    
     super.didChangeDependencies();
     _msgBloc = ServiceProvider.of(context);
   }
 
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
       appBar: AppBar(
         elevation: 2,
@@ -96,20 +98,20 @@ class _MyHomePageState extends State<MyHomePage> {
                       stream: _msgBloc.outEvent,
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
-                          var msgs = snapshot.data.where((msg) =>
-                              msg.targetId == this.widget.targetId ||
-                              msg.senderId == widget.targetId);
-                          msgs.forEach((m)=> m.read=true);
-
+                          messages = snapshot.data
+                              .where((msg) =>
+                                  msg.targetId == this.widget.targetId ||
+                                  msg.senderId == widget.targetId)
+                              .toList();
+                          messages.forEach((m) => m.read = true);
 
                           return ListView(
-                            children: msgs
-                                .map((m) => Padding(
-                                    child: messageList(
-                                        m, m.senderId == this.widget.id),
-                                    padding: EdgeInsets.all(5)))
-                                .toList(),
-                          );
+                              children: messages
+                                  .map((msg) => Padding(
+                                      child: messageList(
+                                          msg, msg.senderId == this.widget.id),
+                                      padding: EdgeInsets.all(5)))
+                                  .toList());
                         } else {
                           return Container(
                             height: 10,
@@ -133,8 +135,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                 InputDecoration(hintText: "Type a message"),
                           ),
                         ),
-                          Container(
-                          width: MediaQuery.of(context).size.width*0.15,
+                        Container(
+                          width: MediaQuery.of(context).size.width * 0.15,
                           child: IconButton(
                             icon: Icon(Icons.perm_media),
                             onPressed: () => getImage(),
@@ -142,7 +144,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           ),
                         ),
                         Container(
-                          width: MediaQuery.of(context).size.width*0.15,
+                          width: MediaQuery.of(context).size.width * 0.15,
                           child: IconButton(
                             icon: Icon(Icons.send),
                             onPressed: () => onSend(),
@@ -160,23 +162,65 @@ class _MyHomePageState extends State<MyHomePage> {
       )),
     );
   }
-  Future getImage() async {
-     image = await ImagePicker.pickImage(source: ImageSource.gallery).then((f)=>f.readAsBytesSync());
-   
+  void mediaChosen(int type)async{
+    switch(type){
+      case 0: 
+      image = await ImagePicker.pickImage(
+            source: ImageSource.gallery, imageQuality: Settings.IMAGE_QUALITY)
+        .then((f) => f.readAsBytesSync());
+        break;
+       case 1: 
+      image = await ImagePicker.pickVideo(
+            source: ImageSource.gallery)
+        .then((f) => f.readAsBytesSync());
+        break;
+      
+       case 2: 
+      image = await ImagePicker.pickImage(
+            source: ImageSource.camera)
+        .then((f) => f.readAsBytesSync());
+        break;
+      
+      
+    }
+    
   }
+
+  Future getImage() async {
+   showDialog(context: context,
+   builder:(context){
+     return MediaHandler(onPressed: mediaChosen,);
+
+   } 
+   
+
+   );
+   /* image = await ImagePicker.pickImage(
+            source: ImageSource.gallery, imageQuality: Settings.IMAGE_QUALITY)
+        .then((f) => f.readAsBytesSync());*/
+  }
+
+  List<Widget> mapWithIndex(List<Message> msgs) {
+    var list = List<Widget>();
+    for (int i = 0; i < msgs.length; i++) {
+      print("li  " + list.length.toString());
+    }
+    return list;
+  }
+
   void onSend() {
     _msgBloc.dispatch(SendMsgEvent(
-        _controllerSend.text, this.widget.id, this.widget.targetId,image));
-        FocusScope.of(context).requestFocus(FocusNode());
-        image=Uint8List.fromList(List());
+        _controllerSend.text, this.widget.id, this.widget.targetId, image));
+    FocusScope.of(context).requestFocus(FocusNode());
+    image = Uint8List.fromList(List());
 
-    print(_controllerSend.text);
     _controllerSend.clear();
     onUpdate();
   }
 
-  void onUpdate() {
-    _scrollController.jumpTo(_scrollController.offset + 20.0 );
+  void onUpdate()  {
+    print(messages.length);
+     _scrollController.animateTo(_scrollController.position.maxScrollExtent,duration:Duration(milliseconds: 1000),curve: Curves.decelerate);
   }
 
   Widget messageList(Message msg, bool userSender) {
@@ -186,7 +230,9 @@ class _MyHomePageState extends State<MyHomePage> {
         padding: EdgeInsets.only(left: 5, right: 5, top: 5, bottom: 5),
         child: Container(
           padding: EdgeInsets.all(10),
-          constraints: BoxConstraints(minWidth: MediaQuery.of(context).size.width*0.3, maxWidth: MediaQuery.of(context).size.width*0.5 ),
+          constraints: BoxConstraints(
+              minWidth: MediaQuery.of(context).size.width * 0.3,
+              maxWidth: MediaQuery.of(context).size.width * 0.5),
           decoration: BoxDecoration(
               boxShadow: [
                 BoxShadow(
@@ -210,7 +256,6 @@ class _MyHomePageState extends State<MyHomePage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
-            
             children: <Widget>[
               RichText(
                 textAlign: TextAlign.justify,
@@ -219,24 +264,24 @@ class _MyHomePageState extends State<MyHomePage> {
                     text: msg.body,
                     style: TextStyle(fontSize: 14, color: Colors.black),
                   ),
-                  
                 ]),
               ),
-              msg.image.isNotEmpty?Container(
-                padding: EdgeInsets.all(4),
-               constraints: BoxConstraints(
-                 maxWidth: MediaQuery.of(context).size.width*0.5,
-                maxHeight: MediaQuery.of(context).size.width*0.6,
-               ),
-                child: Image.memory(Uint8List.fromList(msg.image)),):Container(),
-                RichText(
+              msg.image.isNotEmpty
+                  ? Container(
+                      padding: EdgeInsets.all(4),
+                      constraints: BoxConstraints(
+                        maxWidth: MediaQuery.of(context).size.width * 0.5,
+                        maxHeight: MediaQuery.of(context).size.width * 0.6,
+                      ),
+                      child: Image.memory(Uint8List.fromList(msg.image)),
+                    )
+                  : Container(),
+              RichText(
                   text: TextSpan(
-                    text: "\n" + msg.timestamp.substring(0, 16),
-                    style: TextStyle(fontSize: 10, color: Colors.black),
-                  )
-                )
+                text: "\n" + msg.timestamp.substring(0, 16),
+                style: TextStyle(fontSize: 10, color: Colors.black),
+              ))
             ],
-
           ),
         ),
       ),

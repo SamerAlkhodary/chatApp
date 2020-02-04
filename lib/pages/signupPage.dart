@@ -9,6 +9,8 @@ import 'package:chat/proto/service.pbgrpc.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../settings.dart';
+
 class SignupPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => SignupPageState();
@@ -93,7 +95,7 @@ class SignupPageState extends State {
   }
 
   Future getImage() async {
-    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+    var image = await ImagePicker.pickImage(source: ImageSource.gallery,imageQuality: Settings.IMAGE_QUALITY);
 
     setState(() {
       _image = image;

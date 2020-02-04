@@ -6,16 +6,19 @@ import 'package:grpc/grpc.dart' as prefix0;
 import 'package:grpc/service_api.dart';
 
 class ChatService{
-  String emulator ="10.0.2.2";
-  String phone=  "192.168.1.96";
+  String local ="10.0.2.2";
+  String home=  "192.168.1.96";
+  String uni="10.8.143.51";
   MessingerClient client;
   ChatService(){
     client= MessingerClient(
       prefix0.ClientChannel(
-       phone,
+       home,
         port:8080,
         options: prefix0.ChannelOptions(
-          credentials: prefix0.ChannelCredentials.insecure()
+          credentials: prefix0.ChannelCredentials.secure(
+            onBadCertificate: (a,b)=>true
+          )
         )
       )
     );

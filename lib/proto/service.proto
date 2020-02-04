@@ -29,7 +29,14 @@ message Message {
     string body=3;
     string timestamp=4;
     bool read=5;
-    bytes image=6;
+    Media media = 6;
+}
+message Media {
+    oneof data{
+        bytes image=0;
+        bytes video=2;
+
+    }
 }
 message SignupRequest{
     User user=1;

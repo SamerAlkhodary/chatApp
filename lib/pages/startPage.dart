@@ -62,5 +62,5 @@ class _StartPageState extends State<StartPage> {
     } else {
       return widget._chatListPage;
     }
-  }
+}
 }

@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:chat/bloc/blocProvider.dart';
 import 'package:chat/bloc/msgBloc.dart';
 import 'package:chat/model/appEvent.dart';
+import 'package:chat/notification.dart';
 import 'package:chat/pages/addContactPage.dart';
 import 'package:chat/pages/mainPage.dart';
 import 'package:chat/proto/service.pbgrpc.dart';
@@ -17,15 +18,32 @@ class ChatListPage extends StatefulWidget {
   State<StatefulWidget> createState() => ChatListState();
 }
 
-class ChatListState extends State<ChatListPage> {
+class ChatListState extends State<ChatListPage> with WidgetsBindingObserver {
   MsgBloc _bloc;
   List<User> contactList;
   List<Message> msgList;
+  NotificationHelper notification;
+  bool isPaused = false;
+  int newMsgNumber = 0;
+
   @override
   void initState() {
     contactList = List();
     msgList = List();
+    WidgetsBinding.instance.addObserver(this);
+    notification = NotificationHelper();
     super.initState();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    if (state == AppLifecycleState.paused) {
+      isPaused = true;
+    }
+    if (state == AppLifecycleState.resumed) {
+      isPaused = false;
+    }
   }
 
   @override
@@ -34,8 +52,21 @@ class ChatListState extends State<ChatListPage> {
     _bloc = ServiceProvider.of(context);
 
     _bloc.dispatch(SubscribeEvent(widget.user));
+    _bloc.outEvent.listen((list) => {
+          newMsgNumber = list
+              .where((m) => !m.read && m.senderId != widget.user.id)
+              .toList()
+              .length,
+         if(isPaused) notification.showMsgNotification(context, widget.user, newMsgNumber)
+        });
   }
-  
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -87,8 +118,8 @@ class ChatListState extends State<ChatListPage> {
                         if (snapshot.hasData) {
                           contactList = snapshot.data;
                         }
-                        List listElem = _listElement(
-                            widget.user.id, contactList, _bloc.outEvent);
+                        List listElem = _listElement(widget.user, contactList,
+                            _bloc.outEvent, notification);
                         return ListView.separated(
                           itemCount: contactList.length,
                           itemBuilder: (context, index) {
@@ -112,8 +143,8 @@ class ChatListState extends State<ChatListPage> {
     );
   }
 
-  List<Widget> _listElement(
-      String id, List<User> contactList, Observable<List<Message>> stream) {
+  List<Widget> _listElement(User user, List<User> contactList,
+      Observable<List<Message>> stream, NotificationHelper notificationHelper) {
     print(contactList.length);
     return contactList.map((contact) {
       return Container(
@@ -126,8 +157,7 @@ class ChatListState extends State<ChatListPage> {
                   tag: contact.id,
                   child: CircleAvatar(
                     radius: 30,
-                    backgroundImage:
-                        MemoryImage(Uint8List.fromList(contact.profilePic)),
+                   backgroundImage: MemoryImage(Uint8List.fromList(contact.profilePic)),
                   )),
               title: Text(
                 contact.name,
@@ -137,7 +167,7 @@ class ChatListState extends State<ChatListPage> {
                   contact.name,
                   Uint8List.fromList(contact.profilePic),
                   contact.id,
-                  id,
+                  user.id,
                   context),
               trailing: StreamBuilder<List<Message>>(
                   stream: stream,
@@ -147,7 +177,7 @@ class ChatListState extends State<ChatListPage> {
                       msgList = snapshot.data
                           .where((m) =>
                               !m.read &&
-                              m.senderId != id &&
+                              m.senderId != user.id &&
                               m.senderId == contact.id)
                           .toList();
                     }

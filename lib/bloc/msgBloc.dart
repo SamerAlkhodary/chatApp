@@ -11,7 +11,7 @@ import 'package:rxdart/rxdart.dart';
 
 class MsgBloc extends BlocBase {
   final _msgController = BehaviorSubject<List<Message>>();
-  final _contactsController = PublishSubject<List<User>>();
+  final _contactsController = BehaviorSubject<List<User>>();
   final _userController = BehaviorSubject<User>();
   MsgRepository _msgRepository;
   User user;
@@ -105,7 +105,7 @@ class MsgBloc extends BlocBase {
      this.user=user;
       _userController.add(user);
       var contacts= await Loader.loadContact();
-      if(contacts!=null){this.contacts=contacts;_contactsController.add(contacts);
+      if(contacts!=null){this.contacts=contacts;_contactsController.add(this.contacts);
 
     }
 
