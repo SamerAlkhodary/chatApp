@@ -9,6 +9,27 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
+class Empty extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo('Empty', package: const $pb.PackageName('proto'), createEmptyInstance: create)
+    ..hasRequiredFields = false
+  ;
+
+  Empty._() : super();
+  factory Empty() => create();
+  factory Empty.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory Empty.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  Empty clone() => Empty()..mergeFromMessage(this);
+  Empty copyWith(void Function(Empty) updates) => super.copyWith((message) => updates(message as Empty));
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static Empty create() => Empty._();
+  Empty createEmptyInstance() => create();
+  static $pb.PbList<Empty> createRepeated() => $pb.PbList<Empty>();
+  @$core.pragma('dart2js:noInline')
+  static Empty getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<Empty>(create);
+  static Empty _defaultInstance;
+}
+
 class RegisterRequest extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo('RegisterRequest', package: const $pb.PackageName('proto'), createEmptyInstance: create)
     ..aOM<User>(1, 'user', subBuilder: User.create)
@@ -162,7 +183,7 @@ class Message extends $pb.GeneratedMessage {
     ..aOS(3, 'body')
     ..aOS(4, 'timestamp')
     ..aOB(5, 'read')
-    ..a<$core.List<$core.int>>(6, 'image', $pb.PbFieldType.OY)
+    ..aOM<Media>(6, 'media', subBuilder: Media.create)
     ..hasRequiredFields = false
   ;
 
@@ -227,13 +248,148 @@ class Message extends $pb.GeneratedMessage {
   void clearRead() => clearField(5);
 
   @$pb.TagNumber(6)
-  $core.List<$core.int> get image => $_getN(5);
+  Media get media => $_getN(5);
   @$pb.TagNumber(6)
-  set image($core.List<$core.int> v) { $_setBytes(5, v); }
+  set media(Media v) { setField(6, v); }
   @$pb.TagNumber(6)
-  $core.bool hasImage() => $_has(5);
+  $core.bool hasMedia() => $_has(5);
   @$pb.TagNumber(6)
-  void clearImage() => clearField(6);
+  void clearMedia() => clearField(6);
+  @$pb.TagNumber(6)
+  Media ensureMedia() => $_ensure(5);
+}
+
+enum Media_Data {
+  image, 
+  video, 
+  file, 
+  chunkSize, 
+  empty, 
+  notSet
+}
+
+class Media extends $pb.GeneratedMessage {
+  static const $core.Map<$core.int, Media_Data> _Media_DataByTag = {
+    1 : Media_Data.image,
+    2 : Media_Data.video,
+    3 : Media_Data.file,
+    4 : Media_Data.chunkSize,
+    5 : Media_Data.empty,
+    0 : Media_Data.notSet
+  };
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo('Media', package: const $pb.PackageName('proto'), createEmptyInstance: create)
+    ..oo(0, [1, 2, 3, 4, 5])
+    ..a<$core.List<$core.int>>(1, 'image', $pb.PbFieldType.OY)
+    ..a<$core.List<$core.int>>(2, 'video', $pb.PbFieldType.OY)
+    ..a<$core.List<$core.int>>(3, 'file', $pb.PbFieldType.OY)
+    ..a<$core.int>(4, 'chunkSize', $pb.PbFieldType.O3, protoName: 'chunkSize')
+    ..aOB(5, 'empty')
+    ..hasRequiredFields = false
+  ;
+
+  Media._() : super();
+  factory Media() => create();
+  factory Media.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory Media.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  Media clone() => Media()..mergeFromMessage(this);
+  Media copyWith(void Function(Media) updates) => super.copyWith((message) => updates(message as Media));
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static Media create() => Media._();
+  Media createEmptyInstance() => create();
+  static $pb.PbList<Media> createRepeated() => $pb.PbList<Media>();
+  @$core.pragma('dart2js:noInline')
+  static Media getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<Media>(create);
+  static Media _defaultInstance;
+
+  Media_Data whichData() => _Media_DataByTag[$_whichOneof(0)];
+  void clearData() => clearField($_whichOneof(0));
+
+  @$pb.TagNumber(1)
+  $core.List<$core.int> get image => $_getN(0);
+  @$pb.TagNumber(1)
+  set image($core.List<$core.int> v) { $_setBytes(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasImage() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearImage() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.List<$core.int> get video => $_getN(1);
+  @$pb.TagNumber(2)
+  set video($core.List<$core.int> v) { $_setBytes(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasVideo() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearVideo() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.List<$core.int> get file => $_getN(2);
+  @$pb.TagNumber(3)
+  set file($core.List<$core.int> v) { $_setBytes(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasFile() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearFile() => clearField(3);
+
+  @$pb.TagNumber(4)
+  $core.int get chunkSize => $_getIZ(3);
+  @$pb.TagNumber(4)
+  set chunkSize($core.int v) { $_setSignedInt32(3, v); }
+  @$pb.TagNumber(4)
+  $core.bool hasChunkSize() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearChunkSize() => clearField(4);
+
+  @$pb.TagNumber(5)
+  $core.bool get empty => $_getBF(4);
+  @$pb.TagNumber(5)
+  set empty($core.bool v) { $_setBool(4, v); }
+  @$pb.TagNumber(5)
+  $core.bool hasEmpty() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearEmpty() => clearField(5);
+}
+
+class MediaResponse extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo('MediaResponse', package: const $pb.PackageName('proto'), createEmptyInstance: create)
+    ..aOB(1, 'done')
+    ..aOS(2, 'error')
+    ..hasRequiredFields = false
+  ;
+
+  MediaResponse._() : super();
+  factory MediaResponse() => create();
+  factory MediaResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory MediaResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  MediaResponse clone() => MediaResponse()..mergeFromMessage(this);
+  MediaResponse copyWith(void Function(MediaResponse) updates) => super.copyWith((message) => updates(message as MediaResponse));
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static MediaResponse create() => MediaResponse._();
+  MediaResponse createEmptyInstance() => create();
+  static $pb.PbList<MediaResponse> createRepeated() => $pb.PbList<MediaResponse>();
+  @$core.pragma('dart2js:noInline')
+  static MediaResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<MediaResponse>(create);
+  static MediaResponse _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.bool get done => $_getBF(0);
+  @$pb.TagNumber(1)
+  set done($core.bool v) { $_setBool(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasDone() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearDone() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get error => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set error($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasError() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearError() => clearField(2);
 }
 
 class SignupRequest extends $pb.GeneratedMessage {
